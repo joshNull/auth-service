@@ -8,7 +8,6 @@ const { userSchema } = require('../validation')
 
 dotenv.config()
 
-
 router.post('/register', async (req, res) => {
 
     try {
@@ -55,8 +54,6 @@ router.post('/login', async (req, res) => {
         const validatePassword = await bcrypt.compare(req.body.password, user[0].password)
         if (!validatePassword) throw { "error_message": "Password incorrect" }
 
-        console.log("USER : ", user)
-
         //Create token
         const token = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
 
@@ -68,5 +65,13 @@ router.post('/login', async (req, res) => {
     }
 
 })
+
+// MY TESTER
+
+// const { verifyToken } = require('../tools')
+
+// router.get('/', verifyToken.verifyToken, (req, res) => {
+//     res.send("HELLO WORLD")
+// })
 
 module.exports = router
