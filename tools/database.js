@@ -19,4 +19,7 @@ const query = (query, parameters) => {
     })
 }
 
-module.exports = query
+module.exports = {
+    connection,
+    query
+}

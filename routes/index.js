@@ -1,11 +1,12 @@
 const router = require('express').Router()
 const { userModel } = require('../model')
-const { userSchema } = require('../validation')
+const { userValidation } = require('../validation')
 
 router.post('/register', async (req, res) => {
 
     try {
-        const { error } = userSchema.validate(req.body)
+        let { error } = userValidation.userSchema.validate(req.body)
+        
         if (error) throw { "error_message": error.details[0].message }
 
         let result = await userModel.createUser(req.body)
@@ -14,6 +15,8 @@ router.post('/register', async (req, res) => {
 
     } catch (error) {
 
+        console.log("ERROR : ", error)
+        
         res.status(400).json(error)
 
     }
