@@ -12,10 +12,11 @@ const connection = database.createConnection({
 
 const query = (query, parameters) => {
     return new Promise((res, rej) => {
-        connection.query(query, parameters, function (error, results, fields) {
+        let mysql2 = connection.query(query, parameters, function (error, results, fields) {
             if (error) rej(error)
             res(results)
         });
+        // console.log("SQL : ", mysql2.sql)
     })
 }
 
