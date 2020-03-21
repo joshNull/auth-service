@@ -21,23 +21,28 @@ const query = (query, parameters) => {
 }
 
 const migrate = async () => {
-    const modelDirectory = '/Users/josh/Desktop/My Projects/user-service/model/' // For enhancement
-    const fs = require('fs')
-
-    // console.log(process.argv.splice(1)) insert parameter in npm script
-
-    let files = fs.readdirSync(modelDirectory)
-    .map(file => require(modelDirectory + file.split(".").shift()))
-    .filter((file) => file.model) // Filter modules that only have model object
-    .map(file => file.model()) // Get only models 
-
-    console.log("MODELS : ", files)
-
-    let result = await Promise.all(files)
-
-    console.log("RESULT : ", result)
-
-    process.exit(0) // Clean exit in terminal
+    try {
+        const modelDirectory = '/Users/josh/Desktop/My Projects/user-service/model/' // For enhancement
+        const fs = require('fs')
+    
+        // console.log(process.argv.splice(1)) insert parameter in npm script
+    
+        let files = fs.readdirSync(modelDirectory)
+        .map(file => require(modelDirectory + file.split(".").shift()))
+        .filter((file) => file.model) // Filter modules that only have model object
+        .map(file => file.model()) // Get only models 
+    
+        console.log("MODELS : ", files)
+    
+        let result = await Promise.all(files)
+    
+        console.log("RESULT : ", result)
+    
+        process.exit(0) // Clean exit in terminal
+    } catch (error) {
+        console.log(error)
+        process.exit(0)
+    }
 }
 
 module.exports = {
