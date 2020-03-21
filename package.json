@@ -1,22 +1,22 @@
 {
-  "name": "authentication",
+  "name": "user-service",
   "version": "1.0.0",
-  "description": "Authentication Service",
+  "description": "User Service",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "migrate": "node -e \"require('./tools/database').migrate()\""
+    "migrate": "node -e \"require('./tools/migration').migration()\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joshNull/Authentication.git"
+    "url": "git+https://github.com/joshNull/user-service.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/joshNull/Authentication/issues"
+    "url": "https://github.com/joshNull/user-service/issues"
   },
-  "homepage": "https://github.com/joshNull/Authentication#readme",
+  "homepage": "https://github.com/joshNull/user-service#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "bcryptjs": "^2.4.3",
