@@ -18,6 +18,5 @@ const createUser = async (data) => {
 
 module.exports = {
     getUser,
-    createUser,
-    model
+    createUser
 }
