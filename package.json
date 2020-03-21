@@ -4,7 +4,8 @@
   "description": "Authentication Service",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "migrate": "node -e \"require('./tools/database').migrate()\""
   },
   "repository": {
     "type": "git",
