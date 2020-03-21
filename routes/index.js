@@ -38,6 +38,29 @@ router.post('/register', async (req, res) => {
 
 })
 
+/**
+ * @swagger
+ *
+ * /login:
+ *   post:
+ *     description: Login to the application
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: username
+ *         description: Username to use for login.
+ *         in: json
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: User's password.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: login
+ */
 router.post('/login', async (req, res) => {
 
     try {
@@ -57,7 +80,7 @@ router.post('/login', async (req, res) => {
         //Create token
         const token = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
 
-        res.header('auth-token', token).json(user)
+        res.header('Authorization', token).json(user)
 
     } catch (error) {
         console.log("ERROR : ", error)
