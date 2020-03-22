@@ -7,6 +7,10 @@ const swaggerDefinition = {
         version: '1.0.0',
         description: 'User API'
     },
+    tags : {
+        name: "User",
+        description: "User APIs"
+    }
 };
 
 const options = {
