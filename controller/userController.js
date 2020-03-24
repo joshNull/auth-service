@@ -52,9 +52,18 @@ const login = async (req, res) => {
         if (!validatePassword) throw { "error_message": "Password incorrect" }
 
         //Create token
-        const token = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
+        const refreshToken = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
+        const accessToken = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
 
-        res.header('Authorization', token).json(user)
+
+        res.cookie('refresh-token', refreshToken, { domain: '.example.com', path: '/user', httpOnly: true })
+
+        res.cookie('access-token', accessToken, { domain: '.example.com', path: '/user'})
+        
+        res.json({
+            successful : true,
+            message: "Successfully logged in"
+        })
 
     } catch (error) {
         console.log("ERROR : ", error)
