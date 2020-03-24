@@ -1,5 +1,5 @@
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
 
 const swaggerDefinition = {
     info: {
@@ -10,15 +10,16 @@ const swaggerDefinition = {
     tags : {
         name: "User",
         description: "User APIs"
-    }
-};
+    },
+    basePath: "/api"
+}
 
 const options = {
     swaggerDefinition,
     apis: ['./routes/*.js'],
-};
+}
 
-const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options)
 
 module.exports = {
     swaggerUIServe: swaggerUi.serve,
