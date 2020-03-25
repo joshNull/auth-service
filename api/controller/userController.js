@@ -87,14 +87,13 @@ async function login(req, res) {
 
         // Send response
         res.cookie('refresh-token', refreshToken, {
-            domain: '.example.com',
-            path: '/user',
+            // path: '/user',
             httpOnly: true // This token is intended for server use only
         })
 
         res.cookie('access-token', accessToken, {
-            domain: '.example.com',
-            path: '/user'
+            // path: '/user'
+            overwrite: true
         })
 
         res.json({
