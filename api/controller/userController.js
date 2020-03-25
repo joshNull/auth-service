@@ -7,7 +7,15 @@ const { userSchema } = require('.././validation')
 
 dotenv.config()
 
-const register = async (req, res) => {
+/**
+ * Register controller for a post method route
+ * 
+ * @param {object} req request
+ * @param {object} res response
+ * @return {void} 
+ * Send response to clientside in a JSON format.
+ */
+async function register(req, res) {
     try {
         // Validate request
         let { error } = userSchema.registerValidation(req.body)
@@ -27,7 +35,10 @@ const register = async (req, res) => {
             password: password
         })
 
-        res.json(result)
+        res.json({
+            successful: true,
+            message: "Successfully register an account"
+        })
 
     } catch (error) {
         console.log("ERROR : ", error)
@@ -36,7 +47,15 @@ const register = async (req, res) => {
 
 }
 
-const login = async (req, res) => {
+/**
+ * Login Controller for a post method route.
+ * 
+ * @param {object} req request
+ * @param {object} res response
+ * @description Login the user. Set access and refresh token as cookies. 
+ * @return {void} Send route a response in a JSON format.
+ */
+async function login(req, res) {
     try {
         // Validate request
         let { error } = userSchema.registerValidation(req.body)
@@ -52,16 +71,34 @@ const login = async (req, res) => {
         if (!validatePassword) throw { "error_message": "Password incorrect" }
 
         //Create token
-        const refreshToken = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
-        const accessToken = jwt.sign({ id: user[0].id }, process.env.TOKEN_SECRET)
+        const refreshToken = jwt.sign({
+            id: user[0].id
+        },
+            process.env.TOKEN_SECRET, {
+            expiresIn: '1h',
+        })
 
+        const accessToken = jwt.sign({
+            id: user[0].id
+        },
+            process.env.TOKEN_SECRET, {
+            expiresIn: 60, //1 minute
+        })
 
-        res.cookie('refresh-token', refreshToken, { domain: '.example.com', path: '/user', httpOnly: true })
+        // Send response
+        res.cookie('refresh-token', refreshToken, {
+            domain: '.example.com',
+            path: '/user',
+            httpOnly: true // This token is intended for server use only
+        })
 
-        res.cookie('access-token', accessToken, { domain: '.example.com', path: '/user'})
-        
+        res.cookie('access-token', accessToken, {
+            domain: '.example.com',
+            path: '/user'
+        })
+
         res.json({
-            successful : true,
+            successful: true,
             message: "Successfully logged in"
         })
 
