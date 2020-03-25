@@ -1,20 +1,40 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 
+const { generateAccessToken, validateToken } = require('./token')
+
 dotenv.config()
 
-const verifyToken = (req, res, next) => {
+async function verifyToken(req, res, next) {
 
-    const token = req.header('auth-token')
+    const accessToken = req.cookies['access-token']
+    const refreshToken = req.cookies['refresh-token']
 
-    if (!token) return res.status(401).send("Access Denied.")
+    if (!accessToken) return res.status(401).send("Access Denied.")
 
     try {
-        const verified = jwt.verify(token, process.env.TOKEN_SECRET)
-        req.user = verified
+        let decoded = await validateToken(accessToken, 'access-token')
+        req.user = decoded
         next()
     } catch (error) {
-        res.status(400).send("Invalid Token")
+        if ("name" in error && error.name == "TokenExpiredError" && refreshToken) {
+            validateToken(refreshToken, 'refresh-token')
+                .then((decoded) => {
+
+                    // check for expiration of refresh token
+                    console.log("REFRESH TOKEN : ", decoded)
+
+                    if (decoded) {
+                        let newAccessToken = generateAccessToken({ id: decoded.id })
+                        res.cookie('access-token', newAccessToken, {})
+                        next()
+                    }
+                }).catch((refreshTokenError) => {
+                    res.status(401).json(refreshTokenError)
+                })
+        } else {
+            res.status(401).json(error)
+        }
     }
 
 }
