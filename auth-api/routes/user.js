@@ -63,8 +63,6 @@ const { verifyToken } = require('../tools')
 
 router.get('/', verifyToken.verifyToken, (req, res) => {
 
-    const bcrypt = require("bcryptjs")
-
     res.send("HELLO WORLD")
 })
 

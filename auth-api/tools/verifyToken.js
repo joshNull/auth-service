@@ -22,6 +22,7 @@ async function verifyToken(req, res, next) {
                 .then((decoded) => {
 
                     // check for expiration of refresh token
+                    
                     console.log("REFRESH TOKEN : ", decoded)
 
                     if (decoded) {

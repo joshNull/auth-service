@@ -1,7 +1,7 @@
 {
-  "name": "user-service",
+  "name": "auth-service",
   "version": "1.0.0",
-  "description": "User Service",
+  "description": "Auth Service",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joshNull/user-service.git"
+    "url": "git+https://github.com/joshNull/auth-service.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/joshNull/user-service/issues"
+    "url": "https://github.com/joshNull/auth-service/issues"
   },
-  "homepage": "https://github.com/joshNull/user-service#readme",
+  "homepage": "https://github.com/joshNull/auth-service#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "bcryptjs": "^2.4.3",
