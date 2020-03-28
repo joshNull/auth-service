@@ -23,11 +23,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Main(props) {
-
     const { children } = props
-
     const classes = useStyles()
     const theme = useTheme()
+    
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true
     });
@@ -52,7 +51,11 @@ function Main(props) {
             })}
         >
             <Topbar onSidebarOpen={handleSidebarOpen} />
-            <Sidebar />
+            <Sidebar
+                onClose={handleSidebarClose}
+                open={shouldOpenSidebar}
+                variant={isDesktop ? 'persistent' : 'temporary'}
+            />
             <main>
                 {children}
                 <Footer />

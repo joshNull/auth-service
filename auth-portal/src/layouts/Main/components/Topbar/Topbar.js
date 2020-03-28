@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-// import { Link as RouterLink } from 'react-router-dom'
 import clsx from 'clsx'
-// import propTypes from 'prop-types'
+import propTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core'
-// import MenuIcon from '@material-ui/icons/Menu'
-// import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
-// import InputIcon from '@material-ui/icons/Input'
+import { AppBar, Toolbar, Badge, Hidden, IconButton, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,11 +17,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Topbar(props) {
-
     const { className, onSidebarOpen, ...rest } = props;
-
     const classes = useStyles();
-
 
     return (
         <AppBar
@@ -33,11 +26,16 @@ function Topbar(props) {
             className={clsx(classes.root, className)}
         >
             <Toolbar>
-                AUTH SERVICE
+                <Typography>AUTH SERVICE</Typography>
             </Toolbar>
         </AppBar>
     )
 
+}
+
+Topbar.propTypes = {
+    className: propTypes.string,
+    onSidebarOpen: propTypes.func
 }
 
 export default Topbar
