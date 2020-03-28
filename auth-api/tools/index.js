@@ -1,9 +1,7 @@
-const database = require("./database")
+const token = require("./token")
 const verifyToken = require("./verifyToken")
-const migration = require("./migration")
 
 module.exports = {
-    database,
-    verifyToken,
-    migration
+    token,
+    verifyToken
 }
