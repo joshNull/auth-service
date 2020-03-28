@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 
-const { userModel } = require('.././model')
+const { User } = require('../models')
 const { userSchema } = require('.././validation')
 
 dotenv.config()
@@ -22,18 +22,29 @@ async function register(req, res) {
         if (error) throw { "error_message": error.details[0].message }
 
         //Check if username exist
-        let user = await userModel.getUser({ "username": req.body.username })
-        if (user.length > 0) throw { "error_message": "Username already exist" }
+        let account = await User.findAll({
+            attributes: ['email'],
+            where: {
+                email: req.body.email
+            }
+        });
+
+        if (account.length > 0) throw { "error_message": "Username already exist" }
 
         //Hash password
         const salt = await bcrypt.genSalt(10)
         const password = await bcrypt.hash(req.body.password, salt)
 
         //Create user
-        let result = await userModel.createUser({
-            username: req.body.username,
-            password: password
+        let result = await User.create({
+            firstName: req.body.firstName, // not yet required
+            lastName: req.body.lastName, // not yet required
+            email: req.body.email,
+            password: password,
+            createdAt: ""
         })
+
+        console.log("Register : ", result)
 
         res.json({
             successful: true,
@@ -61,25 +72,30 @@ async function login(req, res) {
         let { error } = userSchema.registerValidation(req.body)
         if (error) throw { "error_message": error.details[0].message }
 
-        let user = await userModel.getUser({ "username": req.body.username })
+        let account = await User.findAll({
+            attributes: ['id', 'email', 'password'],
+            where: {
+                email: req.body.email
+            }
+        });
 
         //Check if username don't exist
-        if (user.length <= 0) throw { "error_message": "Email don't exist" }
+        if (account.length <= 0) throw { "error_message": "Email don't exist" }
 
         //Validate login
-        const validatePassword = await bcrypt.compare(req.body.password, user[0].password)
+        const validatePassword = await bcrypt.compare(req.body.password, account[0]['dataValues']['password'])
         if (!validatePassword) throw { "error_message": "Password incorrect" }
 
         //Create token
         const refreshToken = jwt.sign({
-            id: user[0].id
+            id: account[0]['dataValues']['id']
         },
             process.env.TOKEN_SECRET, {
             expiresIn: '1h',
         })
 
         const accessToken = jwt.sign({
-            id: user[0].id
+            id: account[0]['dataValues']['id']
         },
             process.env.TOKEN_SECRET, {
             expiresIn: 60, //1 minute
