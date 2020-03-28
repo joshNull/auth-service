@@ -1,12 +1,13 @@
 import React from 'react'
-import clsx from 'clsx';
+import clsx from 'clsx'
 import propTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles'
 import { Drawer, Divider } from '@material-ui/core'
 
-import PeopleIcon from '@material-ui/icons/People';
-import LockIcon from '@material-ui/icons/Lock';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PeopleIcon from '@material-ui/icons/People'
+import LockIcon from '@material-ui/icons/Lock'
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
 
 import { SidebarNav } from './components'
 
@@ -52,6 +53,11 @@ function Sidebar(props) {
             title: 'Permission',
             href: '/permission',
             icon: <LockIcon />
+        },
+        {
+            title: 'Login',
+            href: '/login',
+            icon: <VpnKeyIcon />
         },
     ]
 
