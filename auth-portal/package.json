@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.9.7",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.9.6",
     "clsx": "^1.1.0",
     "prop-types": "^15.7.2",
