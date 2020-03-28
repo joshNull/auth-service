@@ -1,8 +1,6 @@
 import React from 'react'
-import { Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { Typography, Grid, Paper } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,7 +18,7 @@ export default function Role() {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Paper classname={classes.paper}>
+                <Paper className={classes.paper}>
                     <Typography>Role</Typography>
                 </Paper>
             </Grid>
