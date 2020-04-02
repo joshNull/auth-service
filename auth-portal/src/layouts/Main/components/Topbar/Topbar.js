@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import clsx from 'clsx'
 import propTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
-import { AppBar, Toolbar, Badge, Hidden, IconButton, Typography } from '@material-ui/core'
+import { AppBar, Toolbar, Button, Badge, Hidden, IconButton, Typography } from '@material-ui/core'
+import { AppContext } from '../../../../context'
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,6 +21,7 @@ const useStyles = makeStyles(theme => ({
 function Topbar(props) {
     const { className, onSidebarOpen, ...rest } = props;
     const classes = useStyles();
+    const [app, setApp] = useContext(AppContext)
 
     return (
         <AppBar
@@ -27,6 +30,24 @@ function Topbar(props) {
         >
             <Toolbar>
                 <Typography>AUTH SERVICE</Typography>
+                <Button
+                    onClick={() => {
+                        setApp((state) => {
+
+                            let newState = Object.assign({}, state);
+
+                            newState.authenticated = false          
+                            
+                            Cookies.remove('access-token')
+                            Cookies.remove('refresh-token')
+
+                            return newState
+                        })
+                    }}
+                    color="inherit">
+                    LOGOUT
+                        </Button>
+
             </Toolbar>
         </AppBar>
     )
