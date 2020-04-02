@@ -1,21 +1,24 @@
 import React from 'react'
-import { render } from 'react-dom'
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { Router, Link } from 'react-router-dom'
+import { ThemeProvider } from '@material-ui/styles'
+import { createBrowserHistory } from 'history'
+
+import { AppProvider } from './context'
 import Routes from './Routes'
-import { ThemeProvider } from '@material-ui/styles';
 import theme from './theme'
-import { createBrowserHistory } from 'history';
 
-const browserHistory = createBrowserHistory();
+import '@babel/polyfill'
 
-
+const browserHistory = createBrowserHistory()
 
 export default function App() {
     return (
-        <ThemeProvider theme={theme}>
-            <Router history={browserHistory}>
-                <Routes />
-            </Router>
-        </ThemeProvider>
+        <AppProvider>
+            <ThemeProvider theme={theme}>
+                <Router history={browserHistory}>
+                    <Routes />
+                </Router>
+            </ThemeProvider>
+        </AppProvider>
     )
 }
