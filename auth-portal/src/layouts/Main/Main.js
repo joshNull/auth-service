@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import propTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/styles';
-import { useMediaQuery, Switch } from '@material-ui/core';
-
-import { Sidebar, Topbar, Footer } from './components';
+import { makeStyles, useTheme } from '@material-ui/styles'
+import { useMediaQuery, Switch } from '@material-ui/core'
+import { Sidebar, Topbar, Footer } from './components'
+import { FullPageLoader } from '../components'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,7 +26,7 @@ function Main(props) {
     const { children } = props
     const classes = useStyles()
     const theme = useTheme()
-    
+
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true
     });
@@ -50,6 +50,7 @@ function Main(props) {
                 [classes.shiftContent]: isDesktop
             })}
         >
+            <FullPageLoader />
             <Topbar onSidebarOpen={handleSidebarOpen} />
             <Sidebar
                 onClose={handleSidebarClose}
