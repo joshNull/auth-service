@@ -1,1 +1,2 @@
-export { default as RouteWithLayout } from './RouteWithLayout'
+export { default as ProtectedPage } from './ProtectedPage'
+export { default as PublicPage } from './PublicPage'
