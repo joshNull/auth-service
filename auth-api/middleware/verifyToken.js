@@ -20,7 +20,7 @@ async function verifyToken(req, res, next) {
     } catch (accessTokenError) {
         if ("name" in accessTokenError && accessTokenError.name == "TokenExpiredError" && refreshToken) {
             console.log("-- REFRESH TOKEN ---", accessTokenError)
-            
+
             validateToken(refreshToken, 'refresh-token')
                 .then((decoded) => {
                     if (decoded) {
@@ -36,7 +36,7 @@ async function verifyToken(req, res, next) {
                     res.status(401).json(refreshTokenError)
                 })
         } else {
-            res.status(401).json(accessTokenError)
+            res.status(401).json({ sucessful: false, message: accessTokenError.message || "An error has occured" })
         }
     }
 
