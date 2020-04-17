@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require("bcryptjs")
 const dotenv = require('dotenv')
-const { User } = require('../models')
+const { user } = require('../models')
 const { userSchema } = require('.././validation')
 
 dotenv.config()
@@ -18,21 +18,21 @@ async function login(req, res) {
     try {
         // Validate request
         let { error } = userSchema.loginValidation(req.body)
-        if (error) throw { "error_message": error.details[0].message }
+        if (error) return res.status(401).json({ successful: false, message: "Incorrect email or password" })
 
-        let account = await User.findAll({
-            attributes: ['id', 'firstName', 'lastName', 'email', 'password'],
+        let account = await user.findAll({
+            attributes: ['id', 'first_name', 'last_name', 'email', 'password'],
             where: {
                 email: req.body.email
             }
         });
 
         //Check if username don't exist
-        if (account.length <= 0) throw { "error_message": "Email don't exist" }
+        if (account.length <= 0) return res.status(401).json({ successful: false, message: "Incorrect email or password" })
 
         //Validate login
         const validatePassword = await bcrypt.compare(req.body.password, account[0]['dataValues']['password'])
-        if (!validatePassword) throw { "error_message": "Password incorrect" }
+        if (!validatePassword) return res.status(401).json({ successful: false, message: "Incorrect email or password" })
 
         //Create token
         const refreshToken = jwt.sign({
@@ -60,6 +60,7 @@ async function login(req, res) {
             overwrite: true
         })
 
+        delete account[0]['dataValues']['id']
         delete account[0]['dataValues']['password']
 
         res.json({
@@ -68,8 +69,7 @@ async function login(req, res) {
         })
 
     } catch (error) {
-        console.log("ERROR", error)
-        res.status(401).json({ successful: false })
+        res.json(error)
     }
 }
 

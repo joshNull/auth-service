@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const dotenv = require('dotenv')
-const { User } = require('../models')
+const { user } = require('../models')
 const { userSchema } = require('.././validation')
 
 dotenv.config()
@@ -9,8 +9,8 @@ async function getUser(req, res) {
     try {
         console.log("USER ID : ", req.user_id)
 
-        let [result] = await User.findAll({
-            attributes: ['firstName', 'lastName', 'email'],
+        let [result] = await user.findAll({
+            attributes: ['first_name', 'last_name', 'email'],
             where: {
                 id: req.user_id
             }
@@ -38,7 +38,7 @@ async function createUser(req, res) {
         if (error) throw { "error_message": error.details[0].message }
 
         //Check if username exist
-        let account = await User.findAll({
+        let account = await user.findAll({
             attributes: ['email'],
             where: {
                 email: req.body.email
@@ -52,15 +52,12 @@ async function createUser(req, res) {
         const password = await bcrypt.hash(req.body.password, salt)
 
         //Create user
-        let result = await User.create({
-            firstName: req.body.firstName, // not yet required
-            lastName: req.body.lastName, // not yet required
+        let result = await user.create({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
             password: password,
-            createdAt: ""
         })
-
-        console.log("Register : ", result)
 
         res.json({
             successful: true,
