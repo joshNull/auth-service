@@ -3,12 +3,9 @@ import clsx from 'clsx'
 import propTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 import { Drawer, Divider } from '@material-ui/core'
-
 import PeopleIcon from '@material-ui/icons/People'
 import LockIcon from '@material-ui/icons/Lock'
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd'
-import VpnKeyIcon from '@material-ui/icons/VpnKey'
-
 import { SidebarNav } from './components'
 
 const useStyles = makeStyles(theme => ({
@@ -53,12 +50,7 @@ function Sidebar(props) {
             title: 'Permission',
             href: '/permission',
             icon: <LockIcon />
-        },
-        {
-            title: 'Login',
-            href: '/login',
-            icon: <VpnKeyIcon />
-        },
+        }
     ]
 
     return (
@@ -73,7 +65,7 @@ function Sidebar(props) {
                 {...rest}
                 className={clsx(classes.root, className)}
             >
-                                <Divider className={classes.divider} />
+                <Divider className={classes.divider} />
 
                 <SidebarNav
                     className={classes.nav}

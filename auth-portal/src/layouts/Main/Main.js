@@ -5,6 +5,8 @@ import { makeStyles, useTheme } from '@material-ui/styles'
 import { useMediaQuery, Switch } from '@material-ui/core'
 import { Sidebar, Topbar, Footer } from './components'
 import { FullPageLoader } from '../components'
+import { ErrorNotif } from '../components'
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +53,7 @@ function Main(props) {
             })}
         >
             <FullPageLoader />
+            <ErrorNotif />
             <Topbar onSidebarOpen={handleSidebarOpen} />
             <Sidebar
                 onClose={handleSidebarClose}
