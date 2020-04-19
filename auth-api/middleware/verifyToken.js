@@ -10,17 +10,14 @@ async function verifyToken(req, res, next) {
     const accessToken = req.cookies['access-token']
     const refreshToken = req.cookies['refresh-token']
 
-    if (!accessToken) return res.status(401).send("Access Denied.")
+    if (!accessToken) return res.status(401).send({ sucessful: false, message: "Access Denied" })
 
     try {
         let decoded = await validateToken(accessToken, 'access-token')
         req.user_id = decoded.id
-        console.log("-- ACCESS TOKEN ---", decoded)
         next()
     } catch (accessTokenError) {
         if ("name" in accessTokenError && accessTokenError.name == "TokenExpiredError" && refreshToken) {
-            console.log("-- REFRESH TOKEN ---", accessTokenError)
-
             validateToken(refreshToken, 'refresh-token')
                 .then((decoded) => {
                     if (decoded) {
@@ -33,13 +30,14 @@ async function verifyToken(req, res, next) {
                         next()
                     }
                 }).catch((refreshTokenError) => {
-                    res.status(401).json({ sucessful: false, message: refreshTokenError.message || "An error has occured" })
+                    console.log("Error : ", refreshTokenError.message)
+                    res.status(401).json({ sucessful: false, message: "Access Denied" })
                 })
         } else {
-            res.status(401).json({ sucessful: false, message: accessTokenError.message || "An error has occured" })
+            console.log("Error : ", accessTokenError.message)
+            res.status(401).json({ sucessful: false, message: "Access Denied" })
         }
     }
-
 }
 
 module.exports = {
