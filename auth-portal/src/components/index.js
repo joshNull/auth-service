@@ -1,2 +1,2 @@
-export { default as ProtectedPage } from './ProtectedPage'
-export { default as PublicPage } from './PublicPage'
+export { default as Page } from './Page'
+export { default as Notification } from './Notification'
