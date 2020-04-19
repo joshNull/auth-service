@@ -33,7 +33,7 @@ async function verifyToken(req, res, next) {
                         next()
                     }
                 }).catch((refreshTokenError) => {
-                    res.status(401).json(refreshTokenError)
+                    res.status(401).json({ sucessful: false, message: refreshTokenError.message || "An error has occured" })
                 })
         } else {
             res.status(401).json({ sucessful: false, message: accessTokenError.message || "An error has occured" })
