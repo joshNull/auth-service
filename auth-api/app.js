@@ -6,6 +6,8 @@ const routes = require('./routes')
 const { verifyToken } = require('./middleware')
 const { swaggerUIServe, swaggerUISetup } = require('./docs/swagger')
 
+app.use('/api-docs', swaggerUIServe, swaggerUISetup)
+
 const whitelist = [
     'http://localhost:3000',
     'http://localhost:8080'
@@ -35,5 +37,7 @@ app.use('/api', routes.login)
 
 // Protected routes
 app.use('/api/user', verifyToken, routes.user)
+app.use('/api/role', verifyToken, routes.role)
+app.use('/api/permission', verifyToken, routes.permission)
 
 module.exports = app
