@@ -1,24 +1,86 @@
-import React, { useState, useContext } from 'react'
-import { Grid, Typography, TextField, Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import React, { useState, useContext, useReducer, useEffect } from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+// import FormControlLabel from '@material-ui/core/FormControlLabel'
+// import Checkbox from '@material-ui/core/Checkbox'
+// import Link from '@material-ui/core/Link'
+// import Grid from '@material-ui/core/Grid'
+// import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
 import { useForm } from 'react-hook-form'
 import { AppContext } from '../../context'
+import { appReducer } from '../../reducer'
+
+
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
+
+function ErrorMessage(props) {
+    return (
+        <Snackbar open={props.show}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            key={'bottom,center'}
+            autoHideDuration={6000} onClose={props.alertOnClose}>
+            <MuiAlert elevation={6} variant="filled" severity="error" onClose={props.alertOnClose}>
+                {props.children}
+            </MuiAlert>
+        </Snackbar>
+    )
+}
 
 const useStyles = makeStyles((theme) => ({
-    TextField: {
-        paddingBottom: theme.spacing(2)
-    }
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }))
 
 export default function Login(props) {
     const classes = useStyles()
     const { register, errors, handleSubmit } = useForm()
+    const [app, setApp] = useContext(AppContext)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [app, setApp] = useContext(AppContext)
+
+    const [newApp, dispatch] = useReducer(appReducer, app)
+
+    // Blank state was set before request was finished
+    useEffect(() => {
+        setApp(newApp)
+    }, [newApp])
 
     const onSubmit = (e) => {
-
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -28,90 +90,98 @@ export default function Login(props) {
 
         fetch(app.env.api_url + 'api/login', options)
             .then(async (response) => {
-
-                const { data } = await response.json()
-
-                // // check for error response
-                // if (!response.ok) {
-                //     // get error message from body or default to response status
-                //     const error = (data && data.message) || response.status;
-                //     return Promise.reject(error);
-                // }
-
-                setApp({
-                    ...app,
-                    authenticated: true,
-                    user: {
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
+                const { successful, data, message } = await response.json()
+                if (successful) {
+                    let userDetails = {
+                        firstName: data.first_name,
+                        lastName: data.last_name,
+                        email: data.email
                     }
-                })
+                    dispatch({ type: "login", payload: { user: userDetails } })
+                    props.history.push('/user')
 
-                props.history.push('/user')
-
+                } else {
+                    throw message
+                }
             })
             .catch(error => {
-                // this.setState({ errorMessage: error });
-                console.error('There was an error!', error);
+                setApp({ ...app, error: { show: true, message: error } })
             })
     }
 
     return (
-        <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}
-        >
-            <Grid item lg={5} xs={12}>
-                <Typography
-                    className={classes.TextField}
-                    variant="h3"
-                >
-                    Sign in
-                </Typography>
-                <form onSubmit={handleSubmit(onSubmit)}>
+        <Container component="main" maxWidth="xs">
 
-                    {/* FOR ENHANCEMENT */}
-                    {errors.password && <Typography>Invalid format</Typography>}
-                    {errors.email && <Typography>Invalid format</Typography>}
+            {/* <ErrorMessage
+                show={app.error.show}
+                alertOnClose={() => setApp({ ...app, error: { show: false, message: app.error.message } })}
+            >
+                {app.error.message}
+            </ErrorMessage> */}
 
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">Sign in</Typography>
+                <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
                     <TextField
-                        className={classes.TextField}
-                        fullWidth
-                        label="Email address"
-                        name="email"
-                        type="text"
                         variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
                         onChange={(e) => { setEmail(e.target.value) }}
                         inputRef={register({ required: true })}
+                        helperText={errors.email && 'Email is required'}
                     />
                     <TextField
-                        className={classes.TextField}
-                        fullWidth
-                        label="password"
-                        name="password"
-                        type="password"
                         variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
                         onChange={(e) => { setPassword(e.target.value) }}
                         inputRef={register({ required: true })}
+                        helperText={errors.password && 'Password is required'}
                     />
+                    {/* <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Remember me"
+                        /> */}
                     <Button
-                        // className={}
-                        color="primary"
-                        // disabled={}
-                        fullWidth
-                        size="large"
                         type="submit"
+                        fullWidth
                         variant="contained"
+                        color="primary"
+                        className={classes.submit}
                     >
-                        Sign in now
+                        Sign In
                     </Button>
+                    {/* <Grid container>
+                            <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
+                            </Grid>
+                            <Grid item>
+                            <Link href="#" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                            </Grid>
+                        </Grid> */}
                 </form>
-            </Grid>
-        </Grid>
+            </div>
+            {/* <Box mt={8}>
+                    <Copyright />
+                </Box> */}
+        </Container>
     )
 }
