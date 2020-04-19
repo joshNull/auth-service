@@ -1,5 +1,5 @@
 const { roleSchema } = require('.././validation')
-const { role, user_role, user } = require('../models')
+const { role, user_role, user, permission } = require('../models')
 const { ErrorHandler, errorFilter } = require('../utility')
 
 async function getRole(req, res) {
@@ -11,7 +11,14 @@ async function getRole(req, res) {
 
         let result = await role.findAll({
             attributes: ['id', 'name', 'date_created', 'date_updated'],
-            where: { ...params }
+            where: { ...params },
+            include: [{
+                model: permission,
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            }]
         })
 
         res.json({ successful: true, data: result })
@@ -43,6 +50,7 @@ async function updateRole(req, res) {
     try {
         let { error } = roleSchema.updateRoleValidation({ ...req.body, ...req.params })
         if (error) throw new ErrorHandler("Invalid Parameter", error.details[0].message)
+
         let checker = await role.findAll({ attributes: ['id'], where: { id: req.params.role_id } })
         if (checker.length <= 0) throw new ErrorHandler("Role not exist")
 
@@ -60,6 +68,7 @@ async function deleteRole(req, res) {
     try {
         let { error } = roleSchema.deleteRoleValidation(req.params)
         if (error) throw new ErrorHandler("Invalid Parameter", error.details[0].message)
+
         let checker = await role.findAll({ attributes: ['id'], where: { id: req.params.role_id } })
         if (checker.length <= 0) throw new ErrorHandler("Role not exist")
 

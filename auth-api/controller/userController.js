@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const dotenv = require('dotenv')
-const { user } = require('../models')
+const { user, role } = require('../models')
 const { userSchema } = require('.././validation')
 
 dotenv.config()
@@ -10,8 +10,15 @@ async function getUser(req, res) {
         let params = req.params.user_id ? { id: req.params.user_id } : {}
 
         let result = await user.findAll({
-            attributes: ['first_name', 'last_name', 'email'],
-            where: { ...params }
+            attributes: ['id', 'first_name', 'last_name', 'email'],
+            where: { ...params },
+            include: [{
+                model: role,
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            }]
         })
 
         res.json({ successful: true, data: result })
