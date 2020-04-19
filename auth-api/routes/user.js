@@ -11,7 +11,7 @@ const { userController } = require('../controller')
  *     responses:
  *       200:
  */
-router.get('/', userController.getUser)
+router.get('/:user_id?', userController.getUser)
 
 /**
  * @swagger
