@@ -3,26 +3,35 @@ const { loginController, userController } = require('../controller')
 
 /**
  * @swagger
- * /user/register:
+ * /register:
  *   post:
  *     tags:
- *      - User
+ *      - Public API
  *     description: Login to the application
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: username
- *         description: Username to use for login.
- *         in: json
- *         required: true
- *         type: string
- *       - name: password
- *         description: User's password.
- *         in: formData
- *         required: true
- *         type: string
+ *     - in: body
+ *       name: body
+ *       description: "User object"
+ *       schema:
+ *         type: object
+ *         properties:
+ *           first_name:
+ *             type: string
+ *           last_name:
+ *             type: string
+ *           email:
+ *             type: string
+ *           password:
+ *             type: string
+ *         example:
+ *           first_name: John
+ *           last_name: doe
+ *           email: "test@test.com"
+ *           password: "123456789"
  *     responses:
  *       200:
  *         description: login
@@ -31,26 +40,29 @@ router.post('/register', userController.createUser)
 
 /**
  * @swagger
- * /user/login:
+ * /login:
  *   post:
  *     tags:
- *      - User
+ *      - Public API
  *     description: Login to the application
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: username
- *         description: Username to use for login.
- *         in: body
- *         required: true
- *         type: string
- *       - name: password
- *         description: User's password.
- *         in: body
- *         required: true
- *         type: string
+ *     - in: body
+ *       name: body
+ *       description: "User object"
+ *       schema:
+ *         type: object
+ *         properties:
+ *           email:
+ *             type: string
+ *           password:
+ *             type: string
+ *         example:
+ *           email: "test@test.com"
+ *           password: "123456789"
  *     responses:
  *       200:
  *         description: login
