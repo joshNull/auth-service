@@ -1,27 +1,36 @@
 import React from 'react'
-import { Typography, Grid, Paper } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles'
+import { Grid } from '@material-ui/core'
+import { UserToolbar, UserTable } from './components'
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
+  root: {
+    padding: theme.spacing(4)
+  }
 }));
 
-export default function User() {
-    const classes = useStyles()
-    return (
-        <Grid container>
-            <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                    <Typography>User</Typography>
-                </Paper>
-            </Grid>
+const User = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <Grid
+        container
+        spacing={4}
+      >
+        <Grid
+          item
+          lg={12}
+          md={12}
+          xl={12}
+          xs={12}
+        >
+          <UserToolbar />
+          <UserTable />
         </Grid>
-    )
-}
+      </Grid>
+    </div>
+  );
+};
+
+export default User;
